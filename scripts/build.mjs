@@ -12,7 +12,12 @@ if (!preset) {
     preset = "vercel";
   } else if (process.env.NETLIFY) {
     preset = "netlify";
-  } else if (process.env.CF_PAGES) {
+  } else if (
+    process.env.CF_PAGES ||
+    process.env.CLOUDFLARE_PAGES ||
+    process.env.CF_PAGES_BRANCH ||
+    process.env.CF_PAGES_URL
+  ) {
     preset = "cloudflare-pages";
   } else {
     preset = "node-server";
@@ -21,14 +26,29 @@ if (!preset) {
 
 console.log(`[Build] Target deployment preset: ${preset}`);
 
-// 2. Prepare environment with selected preset
+const rootDir = process.cwd();
+const distDir = path.join(rootDir, "dist");
+
+// 2. Clean dist directory before Cloudflare build to avoid leftover file collisions
+if (preset === "cloudflare-pages") {
+  try {
+    if (fs.existsSync(distDir)) {
+      fs.rmSync(distDir, { recursive: true, force: true });
+      console.log(`[Build] Cleaned prior dist/ directory for fresh Cloudflare bundle.`);
+    }
+  } catch (cleanErr) {
+    console.warn(`[Build] Notice: Clean directory skipped:`, cleanErr.message);
+  }
+}
+
+// 3. Prepare environment with selected preset
 const env = {
   ...process.env,
   NITRO_PRESET: preset,
 };
 
-// 3. Execute vite build via child process
-const viteProcess = spawn("npx", ["vite", "build"], {
+// 4. Execute vite build via child process
+const viteProcess = spawn("vite", ["build"], {
   stdio: "inherit",
   shell: true,
   env,
@@ -40,10 +60,7 @@ viteProcess.on("close", (code) => {
     process.exit(code ?? 1);
   }
 
-  // 4. Safely handle output directories for cross-platform compatibility
-  const rootDir = process.cwd();
-  const distDir = path.join(rootDir, "dist");
-
+  // 5. Safely handle output directories for cross-platform compatibility
   try {
     if (!fs.existsSync(distDir)) {
       fs.mkdirSync(distDir, { recursive: true });
@@ -58,6 +75,13 @@ viteProcess.on("close", (code) => {
         console.log(`[Build] Synchronized static assets from .vercel/output/static to dist/`);
       }
       console.log(`[Build] Successfully generated Vercel Build Output API v3 bundle (.vercel/output)`);
+    } else if (preset === "cloudflare-pages") {
+      // Cloudflare Pages preset outputs directly into dist/ (_worker.js, _routes.json, and static assets)
+      console.log(`[Build] Cloudflare Pages bundle generated directly in dist/`);
+      const workerPath = path.join(distDir, "_worker.js");
+      if (fs.existsSync(workerPath)) {
+        console.log(`[Build] Verified Cloudflare Pages _worker.js edge bundle.`);
+      }
     } else {
       // For Node server / local builds, sync .output/public to dist
       const publicOutput = path.join(rootDir, ".output", "public");
