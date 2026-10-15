@@ -280,11 +280,7 @@ export const GlobalSearch = memo(function GlobalSearch({
         (m as FullBookingRecord).forwarder?.company_name ||
         (m as Movement).forwarder ||
         "Unassigned";
-      const pol = (
-        (m as FullBookingRecord).origin_port ||
-        (m as Movement).pol ||
-        ""
-      ).toUpperCase();
+      const pol = ((m as FullBookingRecord).origin_port || (m as Movement).pol || "").toUpperCase();
       const pod = (
         (m as FullBookingRecord).destination_port ||
         (m as Movement).pod ||

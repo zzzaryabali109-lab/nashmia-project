@@ -131,10 +131,7 @@ export function EmailPreviewPanel({
 
   // Extracted quotation metrics (Computed directly without hook overhead)
   const extractedQuote = email
-    ? extractQuotationFieldsDeterministic(
-        email.subject || "",
-        email.body || email.snippet || "",
-      )
+    ? extractQuotationFieldsDeterministic(email.subject || "", email.body || email.snippet || "")
     : null;
 
   const totalCount = allEmails.length > 0 ? allEmails.length : 1;
@@ -198,8 +195,7 @@ export function EmailPreviewPanel({
   );
 
   // Real attachments only — no fake demo fallbacks
-  const attachments =
-    email.attachments && email.attachments.length > 0 ? email.attachments : [];
+  const attachments = email.attachments && email.attachments.length > 0 ? email.attachments : [];
 
   // Confirmation state
   const activeConfStatus = localConfirmation?.status || email.confirmationStatus || "NEEDS_REVIEW";

@@ -608,7 +608,9 @@ export const GroupedQuotationModal = memo(function GroupedQuotationModal({
                         {autoSelectedQuotation.forwarderName}
                       </h4>
                       <div className="text-[11.5px] text-slate-600 flex items-center gap-2 mt-0.5 font-medium flex-wrap">
-                        <span>{autoSelectedQuotation.offerData?.carrier || "Direct Carrier Line"}</span>
+                        <span>
+                          {autoSelectedQuotation.offerData?.carrier || "Direct Carrier Line"}
+                        </span>
                         <span>•</span>
                         <span>ETD: {autoSelectedQuotation.offerData?.etd || requestedEtd}</span>
                         <span>•</span>
@@ -617,14 +619,28 @@ export const GroupedQuotationModal = memo(function GroupedQuotationModal({
                     </div>
 
                     <div className="text-right shrink-0">
-                      {autoSelectedQuotation.offerData?.ratePerContainer || autoSelectedQuotation.ratePerContainer ? (
+                      {autoSelectedQuotation.offerData?.ratePerContainer ||
+                      autoSelectedQuotation.ratePerContainer ? (
                         <div>
                           <div className="text-base font-extrabold text-slate-900 font-mono leading-tight">
-                            ${(autoSelectedQuotation.offerData?.ratePerContainer || autoSelectedQuotation.ratePerContainer || 0).toLocaleString()}
-                            <span className="text-[10.5px] font-normal text-slate-500 font-sans ml-1">/cntr</span>
+                            $
+                            {(
+                              autoSelectedQuotation.offerData?.ratePerContainer ||
+                              autoSelectedQuotation.ratePerContainer ||
+                              0
+                            ).toLocaleString()}
+                            <span className="text-[10.5px] font-normal text-slate-500 font-sans ml-1">
+                              /cntr
+                            </span>
                           </div>
                           <div className="text-[10.5px] font-semibold text-[#0FA3B1] font-mono mt-0.5">
-                            Total: ${(autoSelectedQuotation.offerData?.totalFreight || autoSelectedQuotation.totalFreight || 0).toLocaleString()} {autoSelectedQuotation.offerData?.currency || "USD"}
+                            Total: $
+                            {(
+                              autoSelectedQuotation.offerData?.totalFreight ||
+                              autoSelectedQuotation.totalFreight ||
+                              0
+                            ).toLocaleString()}{" "}
+                            {autoSelectedQuotation.offerData?.currency || "USD"}
                           </div>
                         </div>
                       ) : (
@@ -635,7 +651,8 @@ export const GroupedQuotationModal = memo(function GroupedQuotationModal({
 
                   <div className="pt-2 border-t border-[#0FA3B1]/20 flex items-center justify-between gap-2">
                     <p className="text-[11px] text-slate-600 font-medium leading-tight">
-                      System automatically selected this quotation matching Movement <strong className="text-slate-800 font-mono">{movementNo}</strong>.
+                      System automatically selected this quotation matching Movement{" "}
+                      <strong className="text-slate-800 font-mono">{movementNo}</strong>.
                     </p>
                     <Button
                       type="button"

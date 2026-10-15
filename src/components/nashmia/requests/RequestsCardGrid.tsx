@@ -323,7 +323,8 @@ export const RequestsCardGrid = memo(function RequestsCardGrid({
                           </span>
                         ) : fwdSummary.quotationsReceived > 0 ? (
                           <span className="text-emerald-800">
-                            {fwdSummary.quotationsReceived} Quote{fwdSummary.quotationsReceived > 1 ? "s" : ""} Received
+                            {fwdSummary.quotationsReceived} Quote
+                            {fwdSummary.quotationsReceived > 1 ? "s" : ""} Received
                           </span>
                         ) : (
                           <span className="text-slate-500 font-normal">Awaiting Quotations</span>
@@ -334,7 +335,9 @@ export const RequestsCardGrid = memo(function RequestsCardGrid({
                   </div>
 
                   {/* Chota Sa Rate & ETD Preview when forwarder responds */}
-                  {(fwdSummary.bestRate || fwdSummary.bestEtd || fwdSummary.quotationsReceived > 0) && (
+                  {(fwdSummary.bestRate ||
+                    fwdSummary.bestEtd ||
+                    fwdSummary.quotationsReceived > 0) && (
                     <div className="mt-1 pt-1 border-t border-slate-200/60 flex items-center justify-between text-[11px]">
                       <div className="flex items-center gap-1 text-slate-700 font-mono">
                         <span className="text-[10px] text-slate-500 font-sans">Rate:</span>

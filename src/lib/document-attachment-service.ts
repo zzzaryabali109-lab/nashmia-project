@@ -247,6 +247,7 @@ export function sanitizeFilename(rawFilename?: string | null, fallbackExt?: stri
   }
 
   // 1. Remove null bytes and ASCII control characters (0x00 - 0x1F, 0x7F - 0x9F)
+  // eslint-disable-next-line no-control-regex
   let clean = rawFilename.replace(/[\x00-\x1f\x7f-\x9f]/g, "").trim();
 
   // 2. Normalize and strip directory traversal sequences (../, ..\, .., leading slashes)
@@ -3614,7 +3615,9 @@ export async function saveAndLinkIncomingAttachment(
       };
 
       const updatedLinkedDocs = [
-        ...existingLinkedDocs.filter((d) => d.id !== driveFile.id && d.bookingDocumentId !== bookingDocumentId),
+        ...existingLinkedDocs.filter(
+          (d) => d.id !== driveFile.id && d.bookingDocumentId !== bookingDocumentId,
+        ),
         docSummary,
       ];
 
@@ -3648,13 +3651,12 @@ export async function saveAndLinkIncomingAttachment(
         ? `Cut-Off Schedule Extracted (${finalMovementNumber})`
         : `${docTypeTag} Document Saved & Linked`;
 
-      const cutOffSummaryText =
-        isCutOffNotice
-          ? `\nCut-Off Deadlines:\n${formatCutOffDeadlinesSummary(
-              classification.cutOffDeadlines,
-              classification.cutOffDates,
-            )}`
-          : "";
+      const cutOffSummaryText = isCutOffNotice
+        ? `\nCut-Off Deadlines:\n${formatCutOffDeadlinesSummary(
+            classification.cutOffDeadlines,
+            classification.cutOffDates,
+          )}`
+        : "";
 
       const eventDescription = `Document "${driveFile.name}" (${driveFile.fileSize}) from ${
         forwarderDisplayName

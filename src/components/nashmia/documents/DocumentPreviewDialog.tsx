@@ -75,15 +75,21 @@ export function DocumentPreviewDialog({
               onClick={() => {
                 const storagePath = file.metadata?.storagePath;
                 const msgId = file.metadata?.gmailMessageId || file.metadata?.emailMessageId;
-                const attId = (file.metadata as Record<string, unknown>)?.attachmentId as string | undefined;
+                const attId = (file.metadata as Record<string, unknown>)?.attachmentId as
+                  string | undefined;
 
                 let downloadUrl = "";
                 if (storagePath) {
                   downloadUrl = `/api/documents/download?path=${encodeURIComponent(storagePath)}`;
                 } else if (msgId && attId) {
-                  const filename = file.metadata?.originalFilename || file.metadata?.fileName || file.name;
+                  const filename =
+                    file.metadata?.originalFilename || file.metadata?.fileName || file.name;
                   downloadUrl = `/api/gmail/attachment?messageId=${encodeURIComponent(msgId)}&attachmentId=${encodeURIComponent(attId)}&filename=${encodeURIComponent(filename)}`;
-                } else if (file.url && file.url !== "#" && !file.url.startsWith("https://drive.nashmia.com")) {
+                } else if (
+                  file.url &&
+                  file.url !== "#" &&
+                  !file.url.startsWith("https://drive.nashmia.com")
+                ) {
                   downloadUrl = file.url;
                 } else if (file.metadata?.fileUrl && file.metadata.fileUrl !== "#") {
                   downloadUrl = file.metadata.fileUrl;

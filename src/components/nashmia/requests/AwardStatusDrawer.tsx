@@ -27,10 +27,7 @@ import {
 } from "@/lib/multi-forwarder-service";
 import { extractQuotationWithAiFallback } from "@/lib/ai-quotation-fallback";
 import { AwardForwarderModal } from "./AwardForwarderModal";
-import type {
-  BookingRequestRecord,
-  ForwarderQuoteRequestRecord,
-} from "@/types/requests";
+import type { BookingRequestRecord, ForwarderQuoteRequestRecord } from "@/types/requests";
 
 interface AwardStatusDrawerProps {
   isOpen: boolean;
@@ -52,7 +49,9 @@ export const AwardStatusDrawer = memo(function AwardStatusDrawer({
   const [isLoading, setIsLoading] = useState(false);
   const [isAiExtracting, setIsAiExtracting] = useState(false);
   const [aiNote, setAiNote] = useState<string | null>(null);
-  const [awardModalTarget, setAwardModalTarget] = useState<ForwarderQuoteRequestRecord | null>(null);
+  const [awardModalTarget, setAwardModalTarget] = useState<ForwarderQuoteRequestRecord | null>(
+    null,
+  );
 
   const loadRequests = useCallback(async () => {
     if (!booking) return;
@@ -161,7 +160,10 @@ export const AwardStatusDrawer = memo(function AwardStatusDrawer({
         setAiNote(
           `AI verified: Rate $${res.rate ? res.rate.toLocaleString() : "N/A"} / cntr ${res.currency || "USD"}, ETD ${res.etd || "N/A"}${res.carrier ? ` (${res.carrier})` : ""}`,
         );
-        showPillToast.success("AI extracted updated Rate and ETD details from email.", "AI Extraction Verified");
+        showPillToast.success(
+          "AI extracted updated Rate and ETD details from email.",
+          "AI Extraction Verified",
+        );
         void loadRequests();
       } else {
         setAiNote("AI analyzed email: standard forwarder text with no conflicting rates.");
@@ -214,8 +216,13 @@ export const AwardStatusDrawer = memo(function AwardStatusDrawer({
         }
       }
       if (updatedCount > 0) {
-        setAiNote(`AI scanned all emails: Synchronized ${updatedCount} forwarder quotation(s) with Rate & ETD.`);
-        showPillToast.success(`AI updated ${updatedCount} quotation(s) from emails.`, "AI Scan Complete");
+        setAiNote(
+          `AI scanned all emails: Synchronized ${updatedCount} forwarder quotation(s) with Rate & ETD.`,
+        );
+        showPillToast.success(
+          `AI updated ${updatedCount} quotation(s) from emails.`,
+          "AI Scan Complete",
+        );
         void loadRequests();
       } else {
         setAiNote("AI scan complete: All current rates and ETD values are up to date.");
@@ -231,7 +238,10 @@ export const AwardStatusDrawer = memo(function AwardStatusDrawer({
   const handleConfirmAward = async (requestId: string) => {
     try {
       await awardForwarderOffer(requestId, userId);
-      showPillToast.success("Forwarder designated and awarded for this booking.", "Forwarder Awarded");
+      showPillToast.success(
+        "Forwarder designated and awarded for this booking.",
+        "Forwarder Awarded",
+      );
       void loadRequests();
       onAwarded?.();
     } catch (err: unknown) {
@@ -337,13 +347,15 @@ export const AwardStatusDrawer = memo(function AwardStatusDrawer({
                   {awardedQuote?.forwarderName || booking.forwarderName || "Winning Forwarder"}
                 </h4>
                 <p className="text-[11.5px] text-cyan-800 mt-0.5">
-                  Designated as official forwarder for this booking. Space & carrier scheduling in progress.
+                  Designated as official forwarder for this booking. Space & carrier scheduling in
+                  progress.
                 </p>
               </div>
             ) : quotesWithOffers.length > 0 ? (
               <div>
                 <h4 className="text-sm font-extrabold text-slate-900">
-                  {quotesWithOffers.length} Quotation{quotesWithOffers.length > 1 ? "s" : ""} Received via Email
+                  {quotesWithOffers.length} Quotation{quotesWithOffers.length > 1 ? "s" : ""}{" "}
+                  Received via Email
                 </h4>
                 <p className="text-[11.5px] text-slate-600 mt-0.5">
                   Forwarders responded to your RFQ emails. Review rate and ETD below to award.
@@ -351,9 +363,12 @@ export const AwardStatusDrawer = memo(function AwardStatusDrawer({
               </div>
             ) : (
               <div>
-                <h4 className="text-sm font-bold text-slate-800">No Forwarder Quotes Received Yet</h4>
+                <h4 className="text-sm font-bold text-slate-800">
+                  No Forwarder Quotes Received Yet
+                </h4>
                 <p className="text-[11.5px] text-slate-500 mt-0.5">
-                  Inquiries sent via Gmail. As soon as a forwarder replies with Rate & ETD, it will automatically populate here.
+                  Inquiries sent via Gmail. As soon as a forwarder replies with Rate & ETD, it will
+                  automatically populate here.
                 </p>
               </div>
             )}
@@ -388,8 +403,15 @@ export const AwardStatusDrawer = memo(function AwardStatusDrawer({
                 {/* Chota Sa Rate & ETD */}
                 <div className="text-right shrink-0">
                   <div className="text-base font-extrabold text-slate-900 font-mono leading-none">
-                    ${(bestQuote.offerData?.ratePerContainer || bestQuote.ratePerContainer || 0).toLocaleString()}
-                    <span className="text-[10px] font-normal text-slate-500 font-sans ml-1">/cntr</span>
+                    $
+                    {(
+                      bestQuote.offerData?.ratePerContainer ||
+                      bestQuote.ratePerContainer ||
+                      0
+                    ).toLocaleString()}
+                    <span className="text-[10px] font-normal text-slate-500 font-sans ml-1">
+                      /cntr
+                    </span>
                   </div>
                   <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-teal-100/80 border border-teal-200 text-teal-900 font-mono text-[11px] font-bold mt-1.5">
                     <Calendar className="size-3 text-teal-700" />
@@ -460,7 +482,9 @@ export const AwardStatusDrawer = memo(function AwardStatusDrawer({
                   disabled={isLoading}
                   className="text-[11px] text-slate-500 hover:text-slate-800 flex items-center gap-1 font-medium cursor-pointer"
                 >
-                  <RefreshCw className={`size-3 ${isLoading ? "animate-spin text-[#0FA3B1]" : ""}`} />
+                  <RefreshCw
+                    className={`size-3 ${isLoading ? "animate-spin text-[#0FA3B1]" : ""}`}
+                  />
                   Refresh
                 </button>
               </div>

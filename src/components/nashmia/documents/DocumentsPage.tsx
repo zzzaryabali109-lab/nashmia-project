@@ -387,7 +387,9 @@ export function DocumentsPage({ onOpenMobileMenu }: DocumentsPageProps) {
     // 1. If file has a storagePath in Supabase Storage, use secure authorized download proxy
     if (file.metadata?.storagePath) {
       const a = document.createElement("a");
-      const orgParam = organizationId ? `&organizationId=${encodeURIComponent(organizationId)}` : "";
+      const orgParam = organizationId
+        ? `&organizationId=${encodeURIComponent(organizationId)}`
+        : "";
       a.href = `/api/documents/download?path=${encodeURIComponent(file.metadata.storagePath)}${orgParam}`;
       a.download = file.metadata?.originalFilename || file.metadata?.fileName || file.name;
       a.target = "_blank";
@@ -437,7 +439,9 @@ export function DocumentsPage({ onOpenMobileMenu }: DocumentsPageProps) {
     }
 
     // 4. If attachment has not completed synchronization yet, display actual processing status instead of fake data
-    toast.info(`Document "${file.name}" is synchronizing from forwarder email. File content will be ready once retrieved.`);
+    toast.info(
+      `Document "${file.name}" is synchronizing from forwarder email. File content will be ready once retrieved.`,
+    );
   };
 
   const handleShareItem = (item: DriveFile | DriveFolder) => {

@@ -201,10 +201,14 @@ export function ShipmentTrackingView({
               doc.metadata?.movementNumber ||
               doc.metadata?.movementReferenceNumber ||
               ""
-            ).trim().toUpperCase();
+            )
+              .trim()
+              .toUpperCase();
             const docBkId = doc.metadata?.bookingId;
             return (
-              (cleanRef && docMov && (docMov === cleanRef || cleanRef.includes(docMov) || docMov.includes(cleanRef))) ||
+              (cleanRef &&
+                docMov &&
+                (docMov === cleanRef || cleanRef.includes(docMov) || docMov.includes(cleanRef))) ||
               (bkId && docBkId === bkId)
             );
           });
@@ -223,14 +227,14 @@ export function ShipmentTrackingView({
     const cleanRef = movementRef.trim().toUpperCase();
     const bkId = (booking as { id?: string })?.id;
     const matchedLocal = localDocs.filter((doc) => {
-      const docMov = (
-        doc.metadata?.movementNumber ||
-        doc.metadata?.movementReferenceNumber ||
-        ""
-      ).trim().toUpperCase();
+      const docMov = (doc.metadata?.movementNumber || doc.metadata?.movementReferenceNumber || "")
+        .trim()
+        .toUpperCase();
       const docBkId = doc.metadata?.bookingId;
       return (
-        (cleanRef && docMov && (docMov === cleanRef || cleanRef.includes(docMov) || docMov.includes(cleanRef))) ||
+        (cleanRef &&
+          docMov &&
+          (docMov === cleanRef || cleanRef.includes(docMov) || docMov.includes(cleanRef))) ||
         (bkId && docBkId === bkId)
       );
     });
